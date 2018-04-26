@@ -1,10 +1,13 @@
 window.addEventListener('load', ()=> {
-    let time = new Date(Date.now())
+    let time;
     const baseURL = 'http://localhost:3077/'
     const messageFocus = document.getElementById('messageFocus')
     const messageForm = document.getElementById('messageForm')
     const buttonArea = document.getElementById('buttonArea')
     const newMessage = document.getElementById('newMessage')
+
+
+
 
     const timer = () => {
         time = new Date(Date.now())
@@ -20,10 +23,11 @@ window.addEventListener('load', ()=> {
         minutes.value = `${time.getMinutes()}`
         buttonArea.innerHTML = `
         <button id='submit'>submit</button>
-        <button>cancel</button>`;
+        <button id='cancel'>cancel</button>`;
         }
 
     const makeMessageForm = () => {
+        messageFocus.innerHTML = ''
         messageForm.innerHTML = `
         <h4>Please select a date</h4>
         <input id="year" type="text">
@@ -48,10 +52,49 @@ window.addEventListener('load', ()=> {
     //MAKE NEW MESSAGE
     newMessage.addEventListener('click', () => {
         makeMessageForm()
+        const submitButtonNew = document.getElementById('submit')
+        submitButtonNew.addEventListener('click', () => {
+            const newAddress = document.getElementById('address').value
+            const newCarrier = document.getElementById('carrier').value || 'N/A'
+            const newSubject = document.getElementById('subject').value || 'No Subject'
+            const newMessage = document.getElementById('field').value
+
+            const newYear = document.getElementById('year').value
+            const newMonth = document.getElementById('month').value
+            const newDay = document.getElementById('day').value
+            const newHour = document.getElementById('hour').value
+            const newMinutes = document.getElementById('minutes').value
+
+            const newDate = new Date(newYear, newMonth-1, newDay,newHour,newMinutes).toISOString()
+            const newDateNum = Date.parse(newDate)
+            console.log(newDate)
+            console.log(newDateNum)
+            axios.post(baseURL, {address: newAddress, carrier: newCarrier, subject: newSubject, message: newMessage, time: newDate, timeNum: newDateNum})
+            .then(result => {
+                console.log('success')
+                getMessageList();
+                getMessageFocus(result.data.id)
+            })
+            .catch(error => console.error(error))
+
+        })
+        const cancelButtonNew = document.getElementById('cancel')
+        cancelButtonNew.addEventListener('click', () => {
+            messageForm.innerHTML = '';
+            buttonArea.innerHTML = '';
+            getMessageList();
+        })
         
 
     })
 
+    const deleteMessage = (id) => {
+        axios.delete(`${baseURL}${id}`)
+        .then( response => {
+            messageFocus.innerHTML = '';
+            getMessageList()
+        })
+    }
     const getMessageFocus = (id) => {
         axios.get(`${baseURL}${id}`)
         .then( response => {
@@ -65,8 +108,8 @@ window.addEventListener('load', ()=> {
             messageFocusAddress.innerHTML = `To ${item.address}`;
             const messageFocusTime = document.createElement('h4')
             const messageFocusTimer = item.time;
-            const realTime = new Date(Date.parse(messageFocusTimer));
-            messageFocusTime.innerHTML = `Delivery set for: ${realTime}`;
+            const realTime = new Date(messageFocusTimer);
+            messageFocusTime.innerHTML = `Delivery set for: ${realTime.toLocaleDateString()} at ${realTime.toLocaleTimeString()}`;
             const messageFocusMessage = document.createElement('p')
             messageFocusMessage.innerHTML = item.message;
             messageFocus.innerHTML = '';
@@ -82,18 +125,42 @@ window.addEventListener('load', ()=> {
             editButton.addEventListener('click', ()=> {
                 messageFocus.innerHTML = '';
                 makeMessageForm()
-                const messageFormAddress = document.getElementById('address')
-                const messageFormCarrier = document.getElementById('carrier')
-                const messageFormSubject = document.getElementById('subject')
-                const messageFormMessage = document.getElementById('field')
-                messageFormAddress.value = `${item.address}`
-                messageFormCarrier.value = `${item.carrier}`
-                messageFormSubject.value = `${item.subject}`
-                messageFormMessage.value = `${item.message}`
-                timer()
+                messageFormAddress = document.getElementById('address')
+                messageFormAddress.value = item.address
+                messageFormCarrier = document.getElementById('carrier')
+                messageFormCarrier.value = item.carrier
+                messageFormSubject = document.getElementById('subject')
+                messageFormSubject.value = item.subject
+                messageFormMessage = document.getElementById('field')
+                messageFormMessage.value = item.message
+
+                const editSubmit = document.getElementById('submit')
+                editSubmit.addEventListener('click', ()=> {
+                    const editYear = document.getElementById('year').value
+                    const editMonth = document.getElementById('month').value
+                    const editDay = document.getElementById('day').value
+                    const editHour = document.getElementById('hour').value
+                    const editMinutes = document.getElementById('minutes').value
+                    const editDate = new Date(editYear, editMonth-1, editDay,editHour,editMinutes).toISOString()
+                    const editDateNum = Date.parse(editDate)
+                    console.log(editDate)
+                    console.log(editDateNum)
+                    axios.put(`${baseURL}${id}`,{address: messageFormAddress.value, carrier: messageFormCarrier.value, subject: messageFormSubject.value, message: messageFormMessage.value, time: editDate, timeNum: editDateNum})
+                    .then(result => {
+                        getMessageList();
+                        getMessageFocus(result.data.id);
+                    })
+                    .catch(error => console.error(error))
+                })
+                const editCancel = document.getElementById('cancel')
+                editCancel.addEventListener('click', ()=> {
+                    messageForm.innerHTML = '';
+                    buttonArea.innerHTML = '';
+                    getMessageList();
+                })
             })
             deleteButton.addEventListener('click', ()=> {
-                console.log('delete clicked')
+                deleteMessage(id)
             })
         })
         .catch( error => console.error(error))
@@ -118,26 +185,4 @@ window.addEventListener('load', ()=> {
         .catch(error => console.error(error))
     }
     getMessageList()
-
-//DOESNT MATTER
-    const experiment = ()=> {
-        axios.get(baseURL)
-        .then(response =>{
-            const timeLord = response.data
-            const timeDeputy = Date.parse(timeLord[0].time)
-            console.log(timeLord[0].time)
-            console.log(timeDeputy)
-            console.log(new Date(timeDeputy))
-        })
-    }
-    experiment()
-    const submitMessage = ()=> {
-        const submitButton = document.getElementById('submit')
-        submitButton.addEventListener('click', ()=> {
-            const inputTitle = document.getElementById('title')
-            const inputField = document.getElementById('field')
-            
-
-        })
-    }
 })
