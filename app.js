@@ -22,8 +22,8 @@ window.addEventListener('load', ()=> {
         const minutes = document.getElementById('minutes')
         minutes.value = `${time.getMinutes()}`
         buttonArea.innerHTML = `
-        <button id='submit'>submit</button>
-        <button id='cancel'>cancel</button>`;
+        <button class='buttonGreen' id='submit'>submit</button>
+        <button class='buttonGrey' id='cancel'>cancel</button>`;
         }
 
     const makeMessageForm = () => {
@@ -118,8 +118,8 @@ window.addEventListener('load', ()=> {
             messageFocus.appendChild(messageFocusAddress)
             messageFocus.appendChild(messageFocusMessage);
             buttonArea.innerHTML += `
-            <button id='editButton'>Edit</button>
-            <button id='deleteButton'>Delete</button>`;
+            <button class='buttonGreen' id='editButton'>Edit</button>
+            <button class='buttonGrey' id='deleteButton'>Delete</button>`;
             const editButton = document.getElementById('editButton')
             const deleteButton = document.getElementById('deleteButton')
             editButton.addEventListener('click', ()=> {
