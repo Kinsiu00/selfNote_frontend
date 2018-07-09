@@ -38,8 +38,15 @@ window.addEventListener('load', ()=> {
         <input id="minutes" type="text">
         <h4>Address/Telephone Number<h4>
         <input id='address'>
-        <h4>Carrier(if applicable)<h4>
-        <input id='carrier'>
+        <br><br>
+        <h4>Select a Carrier</h4>
+        <div id="carrier">
+            <input type="radio" class='carrierType' id="email" name="select" value='' checked="checked"> Email
+            <input type="radio" class='carrierType' id="tmobile" name="select" value="@tmomail.net"> T-Mobile
+            <input type="radio" class='carrierType' id="att" name="select" value="@txt.att.net"> AT&amp;T 
+            <input type="radio" class='carrierType' id="sprint" name="select" value="@messaging.sprintpcs.com"> Sprint
+            <input type="radio" class='carrierType' id="verizon" name="select" value="@vtext.com"> Verizon
+        </div>
         <h4>Subject<h4>
         <input id='subject'>
         <br>
@@ -49,13 +56,22 @@ window.addEventListener('load', ()=> {
         timer()
     }
 
+    const carrierCheck = () => {
+        let carrierGroup = document.querySelectorAll('.carrierType')
+        carrierGroup.forEach(el => {
+            if (el.checked) {
+                newCarrier = el.value
+            }
+        })
+    }
     //MAKE NEW MESSAGE
     newMessage.addEventListener('click', () => {
         makeMessageForm()
         const submitButtonNew = document.getElementById('submit')
         submitButtonNew.addEventListener('click', () => {
             const newAddress = document.getElementById('address').value
-            const newCarrier = document.getElementById('carrier').value || 'N/A'
+            // const newCarrier = document.getElementsByClassName('carrierType')
+            carrierCheck()
             const newSubject = document.getElementById('subject').value || 'No Subject'
             const newMessage = document.getElementById('field').value
 
@@ -67,11 +83,8 @@ window.addEventListener('load', ()=> {
 
             const newDate = new Date(newYear, newMonth-1, newDay,newHour,newMinutes).toISOString()
             const newDateNum = Date.parse(newDate)
-            console.log(newDate)
-            console.log(newDateNum)
             axios.post(baseURL, {address: newAddress, carrier: newCarrier, subject: newSubject, message: newMessage, time: newDate, timeNum: newDateNum})
             .then(result => {
-                console.log('success')
                 getMessageList();
                 getMessageFocus(result.data.id)
             })
@@ -143,8 +156,7 @@ window.addEventListener('load', ()=> {
                     const editMinutes = document.getElementById('minutes').value
                     const editDate = new Date(editYear, editMonth-1, editDay,editHour,editMinutes).toISOString()
                     const editDateNum = Date.parse(editDate)
-                    console.log(editDate)
-                    console.log(editDateNum)
+
                     axios.put(`${baseURL}${id}`,{address: messageFormAddress.value, carrier: messageFormCarrier.value, subject: messageFormSubject.value, message: messageFormMessage.value, time: editDate, timeNum: editDateNum})
                     .then(result => {
                         getMessageList();
