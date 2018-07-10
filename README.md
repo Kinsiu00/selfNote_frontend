@@ -10,6 +10,7 @@ In the backend root directory, run "npm install" to install the proper middlewar
 
 ### Prerequisites
 
+- A Sendgrid API key
 - Some knowledge of PostgreSQL
 - A cellphone number with one of the supported carriers
 - An email address
@@ -23,6 +24,15 @@ NOTE: the current database needs to be configured to your database.
   documentation for details: https://www.postgresql.org/docs/10/static/client-authentication.html
   - ie: 'postgres://{USERNAME}:{PASSWORD}@localhost/{DATABASE NAME}'
 - Run the command "knex migrate:latest" to set up the table in the database.
+
+
+NOTE: a Sendgrid API key is needed to use the application.
+
+- Create "key.js" on the root directory.
+- Inside set the key variable, ie: key = 'key1234'
+- export the key with 'module.export = key'
+
+Once the database and connection has been set up, simply run "npm start" in the root directory of the backend.
 
 Once the database and connection has been set up, simply run "npm start" in the root directory of the backend.
 
