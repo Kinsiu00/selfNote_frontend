@@ -29,7 +29,7 @@ NOTE: the current database needs to be configured to your database.
 NOTE: a Sendgrid API key is needed to use the application.
 
 - Create "key.js" on the root directory.
-- Inside set the key variable, ie: key = 'key1234'
+- Inside set the key variable, ie: const key = 'key1234'
 - export the key with 'module.export = key'
 
 Once the database and connection has been set up, simply run "npm start" in the root directory of the backend.
