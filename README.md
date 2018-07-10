@@ -5,7 +5,7 @@ Currently supports AT&T, T-Mobile, Verizon, Sprint, and email.
 
 ## Getting Started
 
-Clone this repo as well as the back-end component, found [here](https://github.com/Kinsiu00/selfNote_backend) <br>
+Clone this repo as well as the back-end component, found [here](https://github.com/Kinsiu00/selfNote_backend). <br>
 In the backend root directory, run "npm install" to install the proper middleware and other needed components.
 
 ### Prerequisites
