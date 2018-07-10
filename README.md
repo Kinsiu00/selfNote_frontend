@@ -34,8 +34,6 @@ NOTE: a Sendgrid API key is needed to use the application.
 
 Once the database and connection has been set up, simply run "npm start" in the root directory of the backend.
 
-Once the database and connection has been set up, simply run "npm start" in the root directory of the backend.
-
 ## How to use
 
 Start by creating an entry. Date format is in YYYY/MM/DD, Time is in the 24hr style. (ie: 1644 is 4:44pm)
