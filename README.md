@@ -22,6 +22,7 @@ NOTE: the current database needs to be configured to your database.
   - on Linux and Windows systems, PostgreSQL may require a username/password for PostgreSQL. Please refer to PostgreSQL 
   documentation for details: https://www.postgresql.org/docs/10/static/client-authentication.html
   - ie: 'postgres://{USERNAME}:{PASSWORD}@localhost/{DATABASE NAME}'
+- Run the command "knex migrate:latest" to set up the table in the database.
 
 Once the database and connection has been set up, simply run "npm start" in the root directory of the backend.
 
